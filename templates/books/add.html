@@ -1,0 +1,16 @@
+<html>
+<body>
+
+<form action="/books/add/" method="post">
+{% csrf_token %}
+  <input type="text" name="isbn" />
+  <input type="text" name="title" />
+  <input type="text" name="title" />
+  <input type="text" name="price" />
+  <input type="text" name="minQty" />
+
+  <input type="submit" value="Insert" />
+</form>
+
+</body>
+</html>

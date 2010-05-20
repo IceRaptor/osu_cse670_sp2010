@@ -1,0 +1,24 @@
+<html>
+<body>
+
+<div id="body">
+<form action="/books/admin/maintenance/add" method="post">
+{% csrf_token %}
+
+<div id="category">
+  <span>Categories</span>
+  <div id="cat.inner" >
+    <div id="cat.0">
+      <input type="text" name="cat.1" />
+      <input type="button" value="Add" />
+      <input type="button" value="Delete" />
+    </div>
+  </div>
+</div>
+
+  <input type="submit" value="Done" />
+</form>
+</div> <!-- endof body -->
+
+</body>
+</html>

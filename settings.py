@@ -78,6 +78,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'osu_cse670_sp2010.urls'
 
 TEMPLATE_DIRS = (
+  "templates",
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -91,4 +92,5 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
+    'books'
 )
