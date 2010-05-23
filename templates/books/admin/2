@@ -1,0 +1,42 @@
+<html>
+<script type="text/javascript" src="/static/js/ext/adapter/ext/ext-base.js" ></script>
+<script type="text/javascript" src="/static/js/ext/ext-all-debug.js" ></script>
+<script type="text/javascript" src="/static/js/test.js" ></script>
+
+<script type="text/css" src="/static/js/ext/resources/css/ext-all.css" ></script>
+<script type="text/css" src="/static/js/test.js" ></script>
+
+<body>
+
+<div id="body">
+<form action="/books/admin/maintenance/add" method="post">
+{% csrf_token %}
+
+<a href="">Link</a>
+
+<div id="category">
+  <span>Categories</span>
+  <div id="cat.inner" >
+
+  {% for cat in cats %}
+    <p>
+      <input type="text" name="name.{{ cat.id }}" value="{{ cat.name }}"/>
+      <input type="submit" value="Update" />
+      <input type="submit" value="Delete" />
+    </p>
+
+  {% endfor %}
+
+    <p>
+      <input type="text" name="name.new" value="" />
+      <input type="submit" value="Add" />
+    </p>
+
+  </div>
+</div>
+
+</form>
+</div> <!-- endof body -->
+
+</body>
+</html>

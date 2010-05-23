@@ -1,22 +1,46 @@
 <html>
+<script type="text/javascript" src="/static/js/ext/adapter/ext/ext-base.js" ></script>
+<script type="text/javascript" src="/static/js/ext/ext-all-debug.js" ></script>
+<script type="text/javascript" src="/static/js/test.js" ></script>
+
+<link rel="stylesheet" type="text/css" href="/static/js/ext/resources/css/ext-all.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+
 <body>
 
 <div id="body">
 <form action="/books/admin/maintenance/add" method="post">
 {% csrf_token %}
 
+<a href="">Link</a>
+
+<div id="content">
+  <div id="myDiv">Watch this space.</div>
+  <input type="button" id="myButton" value="Click me" />
+</div>
+
+
 <div id="category">
   <span>Categories</span>
   <div id="cat.inner" >
-    <div id="cat.0">
-      <input type="text" name="cat.1" />
-      <input type="button" value="Add" />
-      <input type="button" value="Delete" />
-    </div>
+
+  {% for cat in cats %}
+    <p>
+      <input type="text" name="name.{{ cat.id }}" value="{{ cat.name }}"/>
+      <input type="submit" value="Update" />
+      <input type="submit" value="Delete" />
+    </p>
+
+  {% endfor %}
+
+    <p>
+      <input type="text" name="name.new" value="" />
+      <input type="submit" value="Add" />
+    </p>
+
   </div>
 </div>
 
-  <input type="submit" value="Done" />
 </form>
 </div> <!-- endof body -->
 

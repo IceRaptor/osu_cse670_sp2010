@@ -22,4 +22,10 @@ urlpatterns = patterns('',
     (r'^books/add/', 'books.views.add'),
     (r'^books/admin/maintenance', 'books.admin_views.maintenance'),
 
+    (r'^static/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': 'static'}),
+
+    (r'^api/', include('api.urls')),
+
+
 )
