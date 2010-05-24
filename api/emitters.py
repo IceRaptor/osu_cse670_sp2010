@@ -24,5 +24,4 @@ class ExtJSONEmitter(Emitter):
     return seria
 
 Emitter.register('ext-json', ExtJSONEmitter, 'application/json; charset=utf-8')
-print "Registered emitter"
 

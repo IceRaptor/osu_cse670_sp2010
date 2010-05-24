@@ -24,13 +24,12 @@ class Author(models.Model):
     return self.fname + " " + self.lname
 
 class Category(models.Model):
-  name = models.CharField(max_length=64, 
-    unique=True)
+  name = models.CharField(max_length=64, unique=True)
 
   def __unicode__(self):
     return self.name
 
-class CreditCardVendor(models.Model):
+class CCVendor(models.Model):
   name = models.CharField(max_length=64)
 
   def __unicode__(self):

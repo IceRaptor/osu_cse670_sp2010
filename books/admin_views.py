@@ -26,8 +26,10 @@ def maintenance(request):
   if request.method == 'POST':
      
     cat = Category()
-    cat.name = request.POST['name.new']
-    cat.save()
+#    cat.name = request.POST['name.new']
+#    print "Trying to save category with name: " + cat.name
+#   print "category data is: " + cat.__unicode__()
+#    cat.save()
   
   cats = Category.objects.all()
   return render_to_response(

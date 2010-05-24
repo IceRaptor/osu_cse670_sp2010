@@ -1,46 +1,60 @@
 from piston.handler import BaseHandler
+from piston.utils import rc
 
-from books.models import Category
+from books.models import Category, State, CCVendor
 
-class CategoryHandler(BaseHandler):
-  fields = ('id', 'name')
-  model = Category
+class NameBaseHandler(BaseHandler):
+  allowed_methods = ('GET', 'POST', 'PUT', 'DELETE')
 
-  def create(self, request, *args, **kwargs):
+  # Invoked on a GET
+  #def read(self, request):
+  #  print "Reached GET method"
+  
+  # Invoked on a POST
+  def create(self, request):
     if not self.has_model():
       return rc.NOT_IMPLEMENTED
 
-    attrs = self.flatten_dict(request.POST)
-    if attrs.has_key('data'):
-      ext_posted_data = simplejson.loads(request.POST.get('data'))
-      attrs = self.flatten_dict(ext_posted_data) 
+    if request.content_type:
+      data = request.data['data']
 
-    try:
-      inst = self.model.objects.get(**attrs)
-      return rc.DUPLICATE_ENTRY
-    except self.model.DoesNotExist:
-      inst = self.model(**attrs)
-      inst.save()
-      return inst
-    except self.model.MultipleObjectsReturned:
-      return rc.DUPLICATE_ENTRY
+      entity = self.model(name=data['name'])
+      entity.save()
+      return rc.CREATED
 
-
+  # Invoked on PUT
   def update(self, request, id):
     if not self.has_model():
       return rc.NOT_IMPLEMENTED
 
-    attrs = self.flatten_dict(request.POST)
-    if attrs.has_key('data'):
-      ext_posted_data = simplejson.loads(request.POST.get('data'))
-      attrs = self.flatten_dict(ext_posted_data) 
+    if request.content_type:
+      data = request.data['data']
+      entity = self.model.objects.get(id=id)
 
-    inst = self.model.objects.get(id=id)
-    inst.name = attrs['name']
-    if attrs.has_key('complete'):
-      inst.complete = attrs['complete']
-    else:
-      inst.complete = False
-    inst.save()
-    
-    return inst
+      ''' SHould be a try/catch in case of key conflict'''
+      entity.name = data['name']
+
+      entity.save()
+      return rc.CREATED
+
+  # Invoked on a DELETE
+  def delete(self, request, id):
+    if not self.has_model():
+      return rc.NOT_IMPLEMENTED
+
+    entity = self.model.objects.get(id=id)
+    if entity != None:
+      entity.delete()
+  
+class CategoryHandler(NameBaseHandler):
+  fields = ('id', 'name')
+  model = Category
+
+class StateHandler(NameBaseHandler):
+  fields = ('id', 'name', 'abbr')
+  model = State
+
+class CCVendorHandler(NameBaseHandler):
+  fields = ('id', 'name')
+  model = CCVendor
+
