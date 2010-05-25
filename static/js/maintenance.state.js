@@ -15,6 +15,7 @@ var reader_state = new Ext.data.JsonReader(
   [
     {name: 'id'},
     {name: 'name', allowBlank: false},
+    {name: 'abbr', allowBlank: false},
   ]
 );
 

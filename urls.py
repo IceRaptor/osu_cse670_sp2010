@@ -15,17 +15,11 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # (r'^admin/', include(admin.site.urls)),
 
-    (r'^books/$', 'books.views.index'),
-    (r'^books/add/', 'books.views.add'),
-    (r'^books/(?P<book_id>\d+)/detail/', 'books.views.detail'),
-    (r'^books/(?P<book_id>\d+)/modify/', 'books.views.modify'),
-    (r'^books/add/', 'books.views.add'),
-    (r'^books/admin/maintenance', 'books.admin_views.maintenance'),
-
     (r'^static/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': 'static'}),
 
     (r'^api/', include('api.urls')),
+    (r'^books/', include('books.urls')),
 
 
 )
