@@ -42,4 +42,9 @@ def insert_book(request):
   template = 'books/admin/insert_book.html'
   resDict = {}
 
+  if request.method == 'POST':
+    print "Found a POST request here..."
+    for item in request.POST:
+      print "Found item: (%s)" % item
+
   return render_to_response(template, resDict, context_instance)

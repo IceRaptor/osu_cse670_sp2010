@@ -36,15 +36,60 @@ Ext.onReady(function() {
   });
 
   // Author Combobox
+  var addAuthorHandler = function() {
+    var auth = [ 'First Name', 'Last Name' ];
+//    var auth = { 'fname': 'First Name', 'lname' : 'Last Name' };
+    editor_author.stopEditing();
+    store_author.insert(0, auth);
+    grid_author.getView().refresh();
+    grid_author.getSelectionModel().selectRow(0);
+    editor_author.startEditing(0);
+  }
+  var deleteAuthorHandler = function() {
+    editor_author.stopEditing();
+    var s = grid_author.getSelectionModel().getSelections();
+    for (var i = 0, r; r = s[i]; i++) {
+      store.remove(r)
+    }
+  }
+
   var grid_author = new Ext.grid.GridPanel({
+    store: store_author,
+    columns: user_cols_author,
     iconCls: 'icon-grid',
     frame: true,
     title: 'Authors',
     autoScroll: true,
-    height: 300,
-    store: store_author,
+    height: 200,
+    stripeRows: true,
+    stateful: true,
+    stateId: 'grid',
     plugins: [editor_author],
-    columns: user_cols_author,
+    tbar: [
+      {
+        text: 'Add',
+        iconCls: 'silk-add',
+        handler: addAuthorHandler
+      },
+      '-',
+      {
+        text: 'Delete',
+        iconCls: 'silk-delete',
+        handler: deleteAuthorHandler
+      }
+    ],
+  });
+
+  // Review Combobox
+  var grid_review = new Ext.grid.GridPanel({
+    iconCls: 'icon-grid',
+    frame: true,
+    title: 'Reviews',
+    autoScroll: true,
+    height: 300,
+    store: store_review,
+    plugins: [editor_review],
+    columns: user_cols_review,
     tbar: [
       {
         text: 'Add',
@@ -58,6 +103,22 @@ Ext.onReady(function() {
     ],
     viewConfig: { forceFit: true },
   });
+
+  // Button handlers
+  var insertSuccess = function() {
+    alert("Successfully inserted book.")
+  };
+
+  var insertHandler = function(b, ev) {
+    simple.form.submit({
+      waitMsg: 'Saving data...',
+      success: insertSuccess
+    });    
+  };
+
+  var cancelHandler = function(b, ev) {
+
+  };
 
   var simple = new Ext.FormPanel({
         labelAlign: 'left',
@@ -75,13 +136,15 @@ Ext.onReady(function() {
             allowDecimal:false,
             allowNegative:false,
             minLength: 10,
-            maxLength: 13
+            maxLength: 13,
+            value: '9999999999999'
           }),
           {
             xtype:'textfield',
             anchor: '95%',
             fieldLabel: 'Title',
-            name: 'title'
+            name: 'title',
+            value: 'Testing Title'
           },
           combo_category,
           {
@@ -96,12 +159,14 @@ Ext.onReady(function() {
                     anchor: '95%',
                     fieldLabel: 'Publisher',
                     name: 'publisher',
+                    value: 'Testing Publisher'
                   }, 
                   {
                     xtype:'textfield',
                     anchor: '95%',
                     fieldLabel: 'Price',
-                    name: 'price'
+                    name: 'price',
+                    value: '4.95'
                   }, 
                 ]
               },
@@ -139,8 +204,12 @@ Ext.onReady(function() {
             ]
           },
           grid_author,
+          grid_review,
         ],
-        buttons: [{ text: 'Insert' },{ text: 'Cancel' }]
+        buttons: [
+          { text: 'Insert', handler: insertHandler },
+          { text: 'Cancel', handler: cancelHandler }
+        ]
     });
 
   simple.render(document.body);
