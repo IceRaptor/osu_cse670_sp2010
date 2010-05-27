@@ -24,6 +24,7 @@ Ext.onReady(function() {
 
  // Category Combobox 
   var combo_category = new Ext.form.ComboBox({
+    id: 'category',
     store: store_category,
     fieldLabel: 'Category',
     displayField:'name',
@@ -37,15 +38,29 @@ Ext.onReady(function() {
 
   // Author Combobox
   var addAuthorHandler = function() {
-    var auth = [ 'First Name', 'Last Name' ];
-//    var auth = { 'fname': 'First Name', 'lname' : 'Last Name' };
+    var newAuth = new record_author({
+      fname: "First",
+      lname: "Last" 
+    });
     editor_author.stopEditing();
-    store_author.insert(0, auth);
+    store_author.insert(0, newAuth);
     grid_author.getView().refresh();
-    grid_author.getSelectionModel().selectRow(0);
+    grid_author.getSelectionModel(); //.selectFirstRow();
+    editor_author.doFocus();
     editor_author.startEditing(0);
   }
-  var deleteAuthorHandler = function() {
+  var addReviewHandler = function() {
+    var newAuth = new record_author({
+      text: "",
+    });
+    editor_review.stopEditing();
+    store_review.insert(0, newAuth);
+    grid_review.getView().refresh();
+    grid_review.getSelectionModel(); //.selectFirstRow();
+    editor_review.doFocus();
+    editor_review.startEditing(0);
+  }
+  var delAuthorHandler = function() {
     editor_author.stopEditing();
     var s = grid_author.getSelectionModel().getSelections();
     for (var i = 0, r; r = s[i]; i++) {
@@ -53,7 +68,8 @@ Ext.onReady(function() {
     }
   }
 
-  var grid_author = new Ext.grid.GridPanel({
+  var grid_author = new Ext.grid.EditorGridPanel({
+    id: 'authors',
     store: store_author,
     columns: user_cols_author,
     iconCls: 'icon-grid',
@@ -75,13 +91,14 @@ Ext.onReady(function() {
       {
         text: 'Delete',
         iconCls: 'silk-delete',
-        handler: deleteAuthorHandler
+        handler: delAuthorHandler
       }
     ],
   });
 
   // Review Combobox
   var grid_review = new Ext.grid.GridPanel({
+    id: 'grid-review',
     iconCls: 'icon-grid',
     frame: true,
     title: 'Reviews',
@@ -94,6 +111,7 @@ Ext.onReady(function() {
       {
         text: 'Add',
         iconCls: 'silk-add',
+        handler: addReviewHandler
       },
       '-',
       {
@@ -110,9 +128,25 @@ Ext.onReady(function() {
   };
 
   var insertHandler = function(b, ev) {
+    // Collect Author data
+
+    var newAuthors = [];
+    store_author.each(function(record) {
+      newAuthors.push(record.data);
+    });
+
+    var newReviews = [];
+    store_review.each(function(record) {
+      newReviews.push(record.data);
+    });
+
     simple.form.submit({
       waitMsg: 'Saving data...',
-      success: insertSuccess
+      success: insertSuccess,
+      params: { 
+        authors: Ext.encode(newAuthors),
+        reviews: Ext.encode(newReviews),
+      }
     });    
   };
 

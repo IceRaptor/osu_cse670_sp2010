@@ -38,7 +38,7 @@ class Author(models.Model):
 class Book(models.Model):
   isbn = models.IntegerField(unique=True)
   title = models.CharField(max_length=256)
-  price = models.IntegerField()
+  price = models.FloatField()
   min_qty = models.IntegerField("minimum quantity")
   publisher = models.CharField(max_length=256)
   pub_date = models.DateTimeField("date published")
@@ -47,6 +47,6 @@ class Book(models.Model):
   reviews = models.ManyToManyField(Review)
 
   def __unicode__(self):
-    return "%s ISBN(%s)" % (self.title, self.isbn)
+    return "ISBN(%s)" % (self.isbn)
 
 

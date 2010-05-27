@@ -25,7 +25,9 @@
 <div id="body">
 
 <div class="container" style="width:600px;">
-  <div id="form-div"></div>
+  <div id="form-div">
+    {% csrf_token %}
+  </div>
 </div>
 
 </div> <!-- endof body -->

@@ -6,6 +6,8 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.views.decorators.csrf import csrf_protect
 from django.template import RequestContext
 
+from datetime import date
+
 from books.models import *
 
 def index(request):
@@ -36,15 +38,43 @@ def maintenance(request):
   resDict['cats'] = cats
   return render_to_response( template, resDict, context_instance)
 
-@csrf_protect
 def insert_book(request):
+  
   context_instance = RequestContext(request)
   template = 'books/admin/insert_book.html'
   resDict = {}
 
   if request.method == 'POST':
-    print "Found a POST request here..."
-    for item in request.POST:
-      print "Found item: (%s)" % item
+    print "POST contents are: %s" % request.POST.items()
 
+    # @TODO: Fragile, we expect all data from the UI...
+    isbnV = request.POST['isbn']
+    print "isbnV = (%s)" % isbnV
+    titleV = request.POST['title']
+    print "titleV = (%s)" % titleV
+    publisherV = request.POST['publisher']
+    pub_yearV = date(int(request.POST['pub_year']), 01, 01)
+    priceV = request.POST['price']
+    min_qtyV = request.POST['min_qty']
+    categoryV = request.POST['category']
+
+    authors = request.POST['authors']
+    reviews = request.POST['reviews']
+
+    try:
+      book = Book.objects.get(isbn=isbnV)
+    except Book.DoesNotExist:
+      category = Category.objects.get(name=categoryV)
+  
+      book = Book(
+        isbn = isbnV,
+        title = titleV,
+        publisher = publisherV,
+        pub_date = pub_yearV,
+        price = priceV,
+        min_qty = min_qtyV,
+        category = category
+      )
+      book.save()
+      
   return render_to_response(template, resDict, context_instance)

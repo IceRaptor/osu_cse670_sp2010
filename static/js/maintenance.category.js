@@ -44,23 +44,24 @@ var editor_category = new Ext.ux.grid.RowEditor({
   saveText: 'Update'
 });
 
+
+Ext.onReady(function() {
+
 // GridPanel + RowEditor
 function onAdd_category(btn, ev) {
-  var u = new userGrid.store.recordType({
+  var u = new grid_category.store.recordType({
     name: 'CategoryName'
   });
-  editor.stopEditing();
-  userGrid.store.insert(0, u);
-  editor.startEditing(0);
+  editor_category.stopEditing();
+  grid_category.store.insert(0, u);
+  editor_category.startEditing(0);
 }
 
 function onDelete_category() {
-  var rec = userGrid.getSelectionModel().getSelected();
+  var rec = grid_category.getSelectionModel().getSelected();
   if (!rec) { return false; }
-  userGrid.store.remove(rec);
+  grid_category.store.remove(rec);
 }
-
-Ext.onReady(function() {
 
   var grid_category = new Ext.grid.GridPanel({
     renderTo: 'grid-category',
