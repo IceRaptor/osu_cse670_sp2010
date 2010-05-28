@@ -20,7 +20,6 @@ def detail(request, book_id):
 def add(request):
   return render_to_response('books/add.html');
 
-@csrf_protect
 def maintenance(request):
   context_instance = RequestContext(request)
   template = 'books/admin/maintenance.html'
@@ -39,7 +38,6 @@ def maintenance(request):
   return render_to_response( template, resDict, context_instance)
 
 def insert_book(request):
-  
   context_instance = RequestContext(request)
   template = 'books/admin/insert_book.html'
   resDict = {}
@@ -58,8 +56,10 @@ def insert_book(request):
     min_qtyV = request.POST['min_qty']
     categoryV = request.POST['category']
 
-    authors = request.POST['authors']
-    reviews = request.POST['reviews']
+    authors = eval(request.POST['authors'])
+    #print "Authors are [%s]" % authors
+    reviews = eval(request.POST['reviews'])
+    #print "Reviews are [%s]" % reviews
 
     try:
       book = Book.objects.get(isbn=isbnV)
@@ -76,5 +76,58 @@ def insert_book(request):
         category = category
       )
       book.save()
-      
+
+      for author in authors:
+        try:
+          author = Author.objects.get(fname = author['fname'], lname = author['lname'])
+        except Author.DoesNotExist:
+          author = Author(fname= author['fname'], lname = author['lname'])
+          author.save()
+        book.authors.add(author)
+
+      for review in reviews:
+        try:
+          review = Review.objects.get(text = review['text'])
+        except Review.DoesNotExist:
+          review = Review(text = review['text'])
+          review.save()
+        book.reviews.add(review)
+  
   return render_to_response(template, resDict, context_instance)
+
+def update_book(request):
+  context_instance = RequestContext(request)
+  template = 'books/admin/update_book.html'
+  resDict = {}
+
+  return render_to_response( template, resDict, context_instance)
+
+def manage_catalog(request):
+  context_instance = RequestContext(request)
+  template = 'books/admin/manage_catalog.html'
+  resDict = {}
+
+  return render_to_response( template, resDict, context_instance)
+
+def place_order(request):
+  context_instance = RequestContext(request)
+  template = 'books/admin/place_order.html'
+  resDict = {}
+
+  return render_to_response( template, resDict, context_instance)
+
+def update_admin(request):
+  context_instance = RequestContext(request)
+  template = 'books/admin/update_admin.html'
+  resDict = {}
+
+  return render_to_response( template, resDict, context_instance)
+
+def index(request):
+  context_instance = RequestContext(request)
+  template = 'books/admin/index.html'
+  resDict = {}
+
+  return render_to_response( template, resDict, context_instance)
+
+      
