@@ -1,87 +1,106 @@
+var App = new Ext.App({});
+
+var store_searchin = new Ext.data.ArrayStore({
+  fields: [{ name: 'text' }]
+});
+var data_searchin = [
+  [ 'Keyword anywhere' ],
+  [ 'Title' ],
+  [ 'Author' ],
+  [ 'Publisher' ],
+  [ 'ISBN' ],
+];
+store_searchin.loadData(data_searchin);
+
+
 Ext.onReady(function() {
   Ext.QuickTips.init();
 
+  var combo_category = new Ext.form.ComboBox({
+    id: 'combo_cat',
+    store: store_category,
+    fieldLabel: 'Category',
+    displayField: 'name',
+    typeAhead: true,
+    mode: 'local',
+    forceSelection: true,
+    triggerAction: 'all',
+    emptyText: 'Select a category...',
+    selectOnFocus: true,
+  });  
+
+  var searchFor = new Ext.form.TextField({
+    anchor: '95%',
+    fieldLabel: 'Search for:',
+    name: 'searchfor',
+    value: '',
+  });
+
+  var combo_searchIn = new Ext.form.ComboBox({
+    id: 'combo_searchin',
+    store: store_searchin,
+    fieldLabel: 'Search In',
+    displayField: 'text',
+    typeAhead: true,
+    mode: 'local',
+    forceSelection: true,
+    triggerAction: 'all',
+    emptyText: 'Select an attribute...',
+    selectOnFocus: true,
+  });
+
   var manageWin = new Ext.Window({
-    applyTo: 'manage_window',
+    applyTo: 'search-win-div',
     layout: 'fit',
     closeAction: 'hide',
-    height: 100,
+    height: 500,
     plain: true,
-    hidden: true,
-    items: new Ext.ButtonGroup({
-      title: 'Manage Bookstore Catalog',
+    hidden: false,
+    resizeable: false,
+    items: new Ext.Panel({
+      title: 'Modify / Delete Books [Search]',
       columns: 1,
-      width: 500,
+      width: 600,
       defaults: { width: 300 },
       items: [
-        {
-          text: 'Insert New Book',
-          handler: function(b,v) {
-            window.location="/books/admin/insert_book";
-          }
-        },
-        {
-          text: 'Modify / Delete Book ',
-          handler: function(b,v) {
-            window.location="/books/admin/modify_book";
-          }
-        },
+        searchFor,
+        combo_searchIn,
+        combo_category,
       ]
       
     }),
 
   });
 
-  var buttonP = new Ext.ButtonGroup({
-    id: 'button-panel',
-    renderTo: 'button_panel',
-    title: 'Admin Tasks- 3-B.com',
-    width: 500,
-    columns: 1,
-    padding: 4,
-    defaults: { width: 300 },
-    items: [
-      {
-        text: 'Manage Bookstore Catalog',
-        handler: function(b,v){
-          //window.location="/books/admin/manage_catalog";
-          manageWin.setVisible(true);
-        }
-      },
-      {
-        text: 'Place Orders',
-        handler: function(b,v){
-          window.location="/books/admin/place_orders";
-        }
-      },
-      {
-        text: 'Generate Reports',
-        handler: function(b,v){
-          window.location="/books/admin/generate_reports";
-        }
-      },
-      {
-        text: 'Update Admin Profile',
-        handler: function(b,v){
-          window.location="/books/admin/update_admin";
-        }
-      },
-      {
-        text: 'System Maintenance',
-        handler: function(b,v){
-          window.location="/books/admin/maintenance";
-        }
-      },
-      {
-        text: 'Exit 3-B.com [Admin]',
-        handler: function(b,v){
-          window.location="/books/";
-        }
-      },
+  var bookUpdateHandler = function(b,e) {
+  }
+  var bookDeleteHandler = function(b,e) {
+  }
 
+  var grid_select = new Ext.grid.GridPanel({
+    id: 'grid_select',
+    iconCls: 'icon-grid',
+    frame: true,
+    title: 'Books',
+    height: 300,
+    autoScroll: true,
+    //store: store_book,
+    //columns: book_cols,
+    tbar: [
+      {
+        text: 'Update',
+        iconCls: 'silk-add',
+        handler: bookUpdateHandler,
+      },
+      {
+        text: 'Delete',
+        iconCls: 'silk-delete',
+        handler: bookDeleteHandler,
+      } 
     ],
+    viewConfig: { forceFit: true },
+  });
 
-  }); 
 
 });
   

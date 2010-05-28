@@ -97,6 +97,13 @@ def insert_book(request):
 
 def modify_book(request):
   context_instance = RequestContext(request)
+  template = 'books/admin/modify_book.html'
+  resDict = {}
+
+  return render_to_response( template, resDict, context_instance)
+
+def update_book(request):
+  context_instance = RequestContext(request)
   template = 'books/admin/update_book.html'
   resDict = {}
 
